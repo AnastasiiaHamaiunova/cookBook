@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+			<div class="recipe">
+				<input type="text" placeholder="Name" name="name">
+				<input type="text" placeholder="Categories" name="categories">
+				<div name="components">
+					<div>
+						<input type="text" placeholder="units" name="units">
+						<input type="text" placeholder="product" name="name">
+						<input type="number" placeholder="quantity" name="quantity">
+					</div>
+					<div>
+						<input type="text" placeholder="units" name="units">
+						<input type="text" placeholder="product" name="name">
+						<input type="number" placeholder="quantity" name="quantity">
+					</div>						
+				</div>
+				<input type="text" placeholder="Description" name="description">
+				<input type="url" placeholder="image link" name="description">
+				<div name="steps">
+					<div>
+						<input type="text" placeholder="description" name="description">
+						<input type="text" placeholder="image url" name="imageUrl">
+					</div>
+					<div>
+						<input type="text" placeholder="description" name="description"> 
+						<input type="text" placeholder="image url" name="imageUrl">
+					</div>            
+				</div>
+			</div>
+			<button id="button"></button>
+		<script>
+			var button = document.getElementById('button');
+						
+			button.addEventListener('click', () => {
+				var data = {};
+				var recipe = document.querySelector(".recipe");
+				
+				for(var element of recipe.children){
+					if(element){
+						if(element.tagName == "INPUT"){
+							data[element.getAttribute("name")] = element.value;
+						}
+
+						if(element.tagName == "DIV"){
+							data[element.getAttribute("name")] = [];
+
+							for(var child of element.children){
+								var inputObj = {};
+
+								for(var input of child.children){									
+									inputObj[input.getAttribute("name")] = input.value;
+								}
+
+								data[element.getAttribute("name")].push(inputObj);
+							}
+						}
+					}
+				}
+
+				fetch("http://localhost:3000/",
+				{
+						method: "POST",
+						headers: {
+							'Accept': 'application/json, text/plain, */*',
+							'Content-Type': 'application/json',
+							'Access-Control-Allow-Origin': '*'
+						},
+						body: JSON.stringify(data)
+				});
+			});
+		</script>   
+    
+</body>
+</html>
